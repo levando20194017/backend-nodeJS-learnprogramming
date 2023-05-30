@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>get CRUD</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Gender</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Action</th>
+        </tr>
+        <% for(var i=0; i < data.length; i++) { %>
+            <tr>
+                <td>
+                    <%= data[i].id %>
+                </td>
+                <td>
+                    <%= data[i].email %>
+                </td>
+                <td>
+                    <%= data[i].fullName %>
+                </td>
+                <td>
+                    <%= data[i].gender %>
+                </td>
+                <td>
+                    <%= data[i].phoneNumber %>
+                </td>
+                <td>
+                    <%= data[i].address %>
+                </td>
+                <td>
+                    <a href="/edit-crud?id=<%= data[i].id %>" class="btn-edit" type="button">Edit</a>
+                    <a href="/delete-crud?id=<%=data[i].id%>" class="btn-delete" type="button">Delete</a>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+</body>
+
+</html>
