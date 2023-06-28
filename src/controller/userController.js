@@ -47,6 +47,15 @@ let handleEditUser = async (req, res) => {
     let message = await userService.updateUserData(data)
     return res.status(200).json(message)
 }
+
+let handleEditInfor = async (req, res) => {
+    let data = req.body;
+    let userData = await userService.handleEditProfile(data)
+    return res.status(200).json({
+        errCode: userData.errCode,
+        message: userData.message
+    })
+}
 let handleDeleteUser = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
@@ -57,10 +66,20 @@ let handleDeleteUser = async (req, res) => {
     let message = await userService.deleteUser(req.body.id);
     return res.status(200).json(message)
 }
+let userChangePassword = async (req, res) => {
+    let data = req.body;
+    let userData = await userService.handleChangePassword(data)
+    return res.status(200).json({
+        errCode: userData.errCode,
+        message: userData.message
+    })
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleEditUser: handleEditUser,
     handleDeleteUser: handleDeleteUser,
+    handleEditInfor: handleEditInfor,
+    userChangePassword: userChangePassword
 }

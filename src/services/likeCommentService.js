@@ -2,11 +2,13 @@ import db from '../models/index'
 let getAllLikes = (commentID) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let likes = await db.LikeComments.count({
-                where: { commentID: commentID },
-            });
-
-            resolve(likes);
+            let likes = '';
+            if (commentID && commentID !== 'ALL') {
+                likes = await db.LikeComments.findAll({
+                    where: { commentID: commentID },
+                });
+                resolve(likes);
+            }
         } catch (e) {
             reject(e);
         }
@@ -16,14 +18,14 @@ let createIsLiked = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let isLiked = await db.LikeComments.findOne({
-                where: { userID: data.userID }
+                where: { commentID: data.commentID, userID: data.userID }
             })
             if (isLiked) {
                 await db.LikeComments.destroy({
-                    where: { userID: data.userID }
+                    where: { commentID: data.commentID, userID: data.userID }
                 });
                 resolve({
-                    errCode: 0,
+                    errCode: 1,
                     message: "not like"
                 })
             } else {

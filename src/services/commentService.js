@@ -43,53 +43,52 @@ let createNewComment = (data) => {
         }
     })
 }
-let deleteComment = (commentID, user) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let comment = db.Comments.findOne({
-                where: { id: commentID }
-            })
-            if (comment) {
-                if (user.role === true || user.id === comment.userID) {
-                    await db.Comments.destroy({
-                        where: { id: commentID }
-                    });
-                    resolve({
-                        errCode: 0,
-                        message: "Comment is deleted"
-                    })
-                } else {
-                    resolve({
-                        errCode: 2,
-                        message: "You don't have permission"
-                    })
+let deleteComment = async (data) => {
+    console.log(data);
+    try {
+        let comment = await db.Comments.findOne({
+            where: { id: data.commentID }
+        });
+        if (comment) {
+            if (data.user.role === true || data.user.id === comment.userID) {
+                await db.Comments.destroy({
+                    where: { id: data.commentID }
+                });
+                return {
+                    errCode: 0,
+                    message: "Comment is deleted"
                 }
             } else {
-                resolve({
-                    errCode: 3,
-                    message: "Comment not found!"
-                })
+                return {
+                    errCode: 2,
+                    message: "You don't have permission"
+                }
             }
-        } catch (e) {
-            reject(e);
+        } else {
+            return {
+                errCode: 3,
+                message: "Comment not found!"
+            }
         }
-    })
+    } catch (e) {
+        throw e;
+    }
 }
-let updateCommentData = (data, user) => {
+let updateCommentData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!data.commentID || !data.user.id) {
                 resolve({
                     errCode: 2,
                     message: "Missing required parameters!"
                 })
             }
             let comment = await db.Comments.findOne({
-                where: { id: data.id },
+                where: { id: data.commentID },
                 raw: false
             });
             if (comment) {
-                if (user.role === true || user.id === comment.userID) {
+                if (data.user.role === true || data.user.id === comment.userID) {
                     comment.content = data.content || comment.content
                     comment.img_url = data.img_url || comment.img_url
                     comment.date = data.date || comment.date

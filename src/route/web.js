@@ -9,6 +9,7 @@ import commentController from "../controller/commentController";
 import likePostController from "../controller/likePostController";
 import likeCommentController from "../controller/likeCommentController";
 import enrollmentController from "../controller/enrollmentController";
+import progressController from "../controller/progressController"
 import { auth } from "../middleware/auth";
 
 // const auth = (req, res, next) => {
@@ -44,8 +45,10 @@ let initWebRoutes = (app) => {
 
     router.get('/api/get-all-users', userController.handleGetAllUsers)
     router.post('/api/login', userController.handleLogin)
-    router.post('/api/create-new-user', auth, userController.handleCreateNewUser)
+    router.post('/api/create-new-user', userController.handleCreateNewUser)
     router.put('/api/edit-user', userController.handleEditUser)
+    router.put('/api/edit-profile', userController.handleEditInfor)
+    router.put('/api/user-changepassword', userController.userChangePassword)
     router.delete('/api/delete-user', auth, userController.handleDeleteUser)
 
     router.get('/api/get-all-courses', courseController.handleGetAllCourses)
@@ -80,6 +83,10 @@ let initWebRoutes = (app) => {
     router.post('/api/comment/isliked', likeCommentController.handleCreateIsLiked)
 
     router.post('/api/course/register', enrollmentController.handleRegisterCourse)
+    router.get('/api/get-all-usersRegisterCourse', enrollmentController.handleGetAllUsersRegisterCourse)
+
+    router.post('/api/progress/create-progress-course', progressController.handleCreateProgressOfCourse)
+    router.get('/api/progress/get-progress-course', progressController.handleGetProgress)
     return app.use("/", router)
 }
 

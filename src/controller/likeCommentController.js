@@ -17,10 +17,12 @@ let handleGetAllLikes = async (req, res) => {
     })
 }
 let handleCreateIsLiked = async (req, res) => {
-    req.body.userID = req.session.user.id;
     let message = await likeCommentService.createIsLiked(req.body);
     console.log(message);
-    return res.status(200).json(message)
+    return res.status(200).json({
+        errCode: message.errCode,
+        message: message.message
+    })
 }
 
 module.exports = {

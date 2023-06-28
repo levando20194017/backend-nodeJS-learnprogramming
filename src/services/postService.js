@@ -43,53 +43,52 @@ let createNewPost = (data) => {
         }
     })
 }
-let deletePost = (postId, user) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let post = db.Posts.findOne({
-                where: { id: postId }
-            })
-            if (post) {
-                if (user.role === true || user.id === post.userID) {
-                    await db.Posts.destroy({
-                        where: { id: postId }
-                    });
-                    resolve({
-                        errCode: 0,
-                        message: "Post is deleted"
-                    })
-                } else {
-                    resolve({
-                        errCode: 2,
-                        message: "You don't have permission"
-                    })
+let deletePost = async (data) => {
+    console.log(data);
+    try {
+        let post = await db.Posts.findOne({
+            where: { id: data.postID }
+        });
+        if (post) {
+            if (data.user.role === true || data.user.id === post.userID) {
+                await db.Posts.destroy({
+                    where: { id: data.postID }
+                });
+                return {
+                    errCode: 0,
+                    message: "Post is deleted"
                 }
             } else {
-                resolve({
-                    errCode: 3,
-                    message: "Post not found!"
-                })
+                return {
+                    errCode: 2,
+                    message: "You don't have permission"
+                }
             }
-        } catch (e) {
-            reject(e);
+        } else {
+            return {
+                errCode: 3,
+                message: "Post not found!"
+            }
         }
-    })
+    } catch (e) {
+        throw e;
+    }
 }
-let updatePostData = (data, user) => {
+let updatePostData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!data.postID || !data.user.id) {
                 resolve({
                     errCode: 2,
                     message: "Missing required parameters!"
                 })
             }
             let post = await db.Posts.findOne({
-                where: { id: data.id },
+                where: { id: data.postID },
                 raw: false
             });
             if (post) {
-                if (user.role === true || user.id === post.userID) {
+                if (data.user.role === true || data.user.id === post.userID) {
                     post.title = data.title || post.title
                     post.content = data.content || post.content
                     post.img_url = data.img_url || post.img_url

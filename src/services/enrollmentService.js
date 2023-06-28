@@ -4,7 +4,7 @@ let registerCourse = (data) => {
         try {
             if (data.userID) {
                 let isRegister = await db.Enrollments.findOne({
-                    where: { userID: data.userID }
+                    where: { userID: data.userID, courseID: data.courseID }
                 })
                 if (isRegister) {
                     resolve({
@@ -32,6 +32,25 @@ let registerCourse = (data) => {
         }
     })
 }
+let getUsersRegisterCourse = (courseId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let usersRegisterCourse = '';
+            if (courseId === 'ALL') {
+                courses = await db.Enrollments.findAll();
+            }
+            if (courseId && courseId !== 'ALL') {
+                usersRegisterCourse = await db.Enrollments.findAll({
+                    where: { courseID: courseId },
+                })
+            }
+            resolve(usersRegisterCourse);
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 module.exports = {
     registerCourse: registerCourse,
+    getUsersRegisterCourse: getUsersRegisterCourse
 }

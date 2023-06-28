@@ -23,7 +23,7 @@ let createNewVideo = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             await db.Videos.create({
-                lessonID: data.lessonId,
+                lessonID: data.lessonID,
                 title: data.title,
                 description: data.description,
                 video_url: data.video_url,
