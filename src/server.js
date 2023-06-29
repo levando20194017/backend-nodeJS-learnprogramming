@@ -22,16 +22,19 @@ const session = require('express-session');
 let app = express();
 
 //Lưu ý rằng để sử dụng req.user, bạn cần phải sử dụng session middleware để lưu trữ thông tin user
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     next();
+// });
 app.use(session({
     secret: 'secret_key',
     resave: false,
     saveUninitialized: true,
 }));
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.URL_REACT,
     credentials: true
 }));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
