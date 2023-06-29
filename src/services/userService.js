@@ -238,7 +238,7 @@ let handleEditProfile = (data) => {
                     user.address = data.address || user.address
                     user.phoneNumber = data.phoneNumber || user.phoneNumber
                     user.img_url = data.img_url || user.img_url
-                    user.gender = data.gender || user.gender
+                    user.gender = data.gender
 
                     await user.save();
                     resolve({
